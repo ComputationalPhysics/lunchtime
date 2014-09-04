@@ -15,7 +15,7 @@ if(isset($_GET["suggest"]) && isset($_GET["username"])) {
     $time = intval($_GET["suggest"]);
     $username = mysqli_real_escape_string($con, $_GET["username"]);
 
-    $result = mysqli_query($con,"INSERT INTO lunchtime_suggestions (suggestion_time, username) VALUES (NOW() + INTERVAL $time MINUTE, '$username')");
+    $result = mysqli_query($con,"INSERT INTO lunchtime_suggestions (suggestion_time, created_time, username) VALUES (NOW() + INTERVAL $time MINUTE, NOW(), '$username')");
     if(!$result) {
         printf("Errormessage: %s\n", mysqli_error($con));
     } else {
@@ -39,6 +39,7 @@ if(isset($_GET["suggest"]) && isset($_GET["username"])) {
         }
         echo "{";
         echo "\"suggestion_id\":\"" . $row['suggestion_id'] . "\",\n";
+        echo "\"created_time\":\"" . $row['created_time'] . "\",\n";
         echo "\"time\":\"" . $row['suggestion_time'] . "\",\n";
         echo "\"username\":\"" . $row['username'] . "\",\n";
         echo "\"upvotes\":\"" . $row['upvotes'] . "\",\n";
