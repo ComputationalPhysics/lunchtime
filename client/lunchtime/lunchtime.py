@@ -52,25 +52,28 @@ def quit_app(item):
     gtk.main_quit()
 
 def check_status(*args):
-    global previous_suggestion
-    url = "http://comp-phys.net/lunch"
-    resp = requests.get(url=url)
-    data = json.loads(resp.text)
-    if len(data) < 1:
-        a.set_icon("user-invisible-panel")
-        suggestion_item.set_label(suggestion_no_text)
-    else:        
-        current_suggestion = data[0]["username"] + data[0]["time"]
-        suggestion_text = data[0]["username"] + " suggests lunch in " + data[0]["eta"] + " min"
-        suggestion_item.set_label(suggestion_text)
-        if int(data[0]["eta"]) <= 5:
-            a.set_icon("user-away-panel")    
-        else:
-            a.set_icon("user-idle-panel")
-        if current_suggestion != previous_suggestion:
-            n = pynotify.Notification(suggestion_text)
-            n.show()
-            previous_suggestion = current_suggestion
+    try:
+        global previous_suggestion
+        url = "http://comp-phys.net/lunch"
+        resp = requests.get(url=url)
+        data = json.loads(resp.text)
+        if len(data) < 1:
+            a.set_icon("user-invisible-panel")
+            suggestion_item.set_label(suggestion_no_text)
+        else:        
+            current_suggestion = data[0]["username"] + data[0]["time"]
+            suggestion_text = data[0]["username"] + " suggests lunch in " + data[0]["eta"] + " min"
+            suggestion_item.set_label(suggestion_text)
+            if int(data[0]["eta"]) <= 5:
+                a.set_icon("user-away-panel")    
+            else:
+                a.set_icon("user-idle-panel")
+            if current_suggestion != previous_suggestion:
+                n = pynotify.Notification(suggestion_text)
+                n.show()
+                previous_suggestion = current_suggestion
+    except Exception:
+        print "Error!"
     return True
 
 def propose_lunch(delay):
