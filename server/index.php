@@ -11,7 +11,19 @@ if(!$result) {
     printf("Errormessage: %s\n", mysqli_error($con));
 }
 
-if(isset($_GET["suggest"]) && isset($_GET["username"])) {
+if(isset($_POST["token"])) {
+    $text = $_POST["text"];
+    $numbers = preg_replace("/[^0-9]/", "", $text);
+    $time = intval($numbers);
+    $username = mysqli_real_escape_string($con, $_POST["user_name"]);
+
+    $result = mysqli_query($con,"INSERT INTO lunchtime_suggestions (suggestion_time, created_time, username) VALUES (NOW() + INTERVAL $time MINUTE, NOW(), '$username')");
+    if(!$result) {
+        printf("Errormessage: %s\n", mysqli_error($con));
+    } else {
+        echo "Ok!";
+    }
+} elseif(isset($_GET["suggest"]) && isset($_GET["username"])) {
     $time = intval($_GET["suggest"]);
     $username = mysqli_real_escape_string($con, $_GET["username"]);
 
