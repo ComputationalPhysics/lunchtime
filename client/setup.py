@@ -1,7 +1,7 @@
 from setuptools import setup
 setup(
     name='lunchtime',
-    version='1.1',
+    version='1.3',
     author="Svenn-Arne Dragly",
     author_email="s@dragly.com",
     description="CompPhys Lunchtime",

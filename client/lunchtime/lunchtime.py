@@ -76,9 +76,17 @@ def check_status(*args):
         print "Error!"
     return True
 
-def propose_lunch(delay):
-    url = "http://comp-phys.net/lunch?suggest=" + str(delay) + "&username=" + getpass.getuser()
-    requests.get(url=url)
+def propose_lunch(delay):    
+    url = "https://hooks.slack.com/services/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"
+    headers = {'content-type':'application/json'}
+    payload = json.dumps({
+        'channel' : "#lunch",
+        'username' : getpass.getuser() ,
+        'text' : "lunch in " + str(delay) + " minute(s)?",
+        'icon_emoji' : ':rocket:',
+    })
+    request = requests.post(url, headers=headers, data=payload)
+    print "Response: %s - %s" % (request.status_code, request.reason)
     check_status()
 
 def propose_lunch_5(item):
